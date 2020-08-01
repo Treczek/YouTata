@@ -6,7 +6,12 @@ from windows import MainWindow
 class Main:
     def __init__(self):
         self.log = logging.getLogger("")
-        link = MainWindow()
+        self.log.setLevel(logging.INFO)
+
+        logging.info("test")
+
+        MainWindow()
+
 
 if __name__ == "__main__":
     Main()
