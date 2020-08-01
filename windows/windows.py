@@ -1,5 +1,7 @@
 import logging
 import tkinter as tk
+import tkinter.tix as tix
+from tkinter import filedialog
 
 from downloader import Downloader
 
@@ -8,11 +10,9 @@ class MainWindow:
     def __init__(self):
 
         window = tk.Tk()
+        window.title("KIH-tata_downloader v.0.5.0")
 
-        self.version = tk.Label(text="KIH-tata_downloader v.0.0.1")
-        self.version.pack(side="top")
-
-        self.create_space(1)
+        self.create_space(3)
 
         self.link_entry_label = tk.Label(text="Link do YouYube:")
         self.link_entry_label.pack()
@@ -20,14 +20,14 @@ class MainWindow:
         self.link_entry = tk.Entry(window, fg="darkred", bg="white", width=50)
         self.link_entry.pack()
 
-        self.button = tk.Button(
+        self.button_download = tk.Button(
             # TODO dodać eksplorator
             command=self.get_yt_link,
             text="Ściągnij",
             width=12, height=1,
             bg="lightgray", fg="black",
         )
-        self.button.pack()
+        self.button_download.pack()
 
         self.create_space(3)
 
@@ -46,6 +46,13 @@ class MainWindow:
 
     def download_video(self, yt_link):
         video = Downloader(yt_link)
-        # video.print_description()
-        video.start()
+        directory = self.change_download_destination()
+        video.print_description()
+        video.start(directory)
+
+    def change_download_destination(self):
+        root = tk.Tk()
+        root.withdraw()
+        return filedialog.askdirectory()
+
 
