@@ -10,7 +10,8 @@ class Downloader:
         logging.getLogger("pytube.__main__").setLevel(logging.WARNING)
 
         self._youtube_link = youtube_link
-        logging.info(f"\nLink: {youtube_link}")
+        logging.info(f"Link: {youtube_link}")
+        self.ys = None
 
         try:
             self.yt = pytube.YouTube(self._youtube_link)
@@ -18,13 +19,15 @@ class Downloader:
             logging.warning("Niepoprawny link. Spróbuj jeszcze raz.")
             raise ValueError
 
-    def print_description(self):
-        logging.info(f"Title:  {self.yt.title}")
-        logging.info(f"Number of views: {self.yt.views}")
-        logging.info(f"Length: {self.yt.length} seconds")
-        logging.info(f"Ratings: {self.yt.rating}")
+    def get_description(self):
+
+        youtube_stats = dict(title=self.yt.title, views=self.yt.views, length=self.yt.length,
+                             rating=self.yt.rating, description=self.yt.description)
+        return youtube_stats
 
     def start(self, directory):
-        ys = self.yt.streams.get_highest_resolution()
-        ys.download(directory)
+
+        self.ys = self.yt.streams.filter(file_extension="mp4").first()
+        logging.info(f"Size: {round(self.ys.filesize / 1024**2,1)} MB")
+        self.ys.download(directory)
         logging.info("Film ściągnięty")

@@ -8,8 +8,6 @@ class Main:
         self.log = logging.getLogger("")
         self.log.setLevel(logging.INFO)
 
-        logging.info("test")
-
         MainWindow()
 
 
