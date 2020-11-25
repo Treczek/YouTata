@@ -2,7 +2,7 @@ import tkinter as tk
 import threading
 import logging
 
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 from tkinter.ttk import Progressbar, Style
 from PIL import ImageTk, Image
 from pathlib import Path
@@ -34,7 +34,7 @@ class MainWindow:
         style.theme_use('clam')
         style.configure("white.Horizontal.TProgressbar", foreground='white', background='white')
 
-        # # Logo
+        # Logo
         logo_path = Path(__file__).resolve().parent.parent / 'graphics' / 'logo-final-120.png'
         img = ImageTk.PhotoImage(Image.open(logo_path))
         self.panel = tk.Label(self.window, image=img)
@@ -98,7 +98,10 @@ class MainWindow:
 
     def remove_progressbar(self):
         self.progress_bar.place_forget()
+        self.progress_bar['value'] = 0
+
         self.progress_percent.place_forget()
+        self.progress_percent.config(text='0%')
 
     def create_info_popup(self, title, text):
         root = tk.Tk()
@@ -113,4 +116,5 @@ class MainWindow:
             self.progress_bar['value'] = percent
         else:
             self.remove_progressbar()
+            messagebox.showinfo(title=None, message=f"Film '{self.video.title}' ściągnięty")
             logging.info("Movie downloaded")
